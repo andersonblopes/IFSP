@@ -1,4 +1,5 @@
-#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
 
 //O inicio do programa
 int main(int argc, char** argv) {
