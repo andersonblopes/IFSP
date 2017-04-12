@@ -5,9 +5,16 @@
  */
 package nomeesobrenome;
 
-import java.awt.Color;
-import java.util.List;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.StringTokenizer;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -15,14 +22,21 @@ import javax.swing.JOptionPane;
  * @author ander
  */
 public class NomeSobrenoForm extends javax.swing.JFrame {
-    
+
     Vector v = new Vector();
-    
+    public BufferedWriter br = null;
+
     /**
      * Creates new form NomeSobrenoForm
      */
     public NomeSobrenoForm() {
         initComponents();
+        try {
+            br = new BufferedWriter(new FileWriter(new File("arquivo.txt"), true));
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+            Logger.getLogger(NomeSobrenoForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -39,6 +53,9 @@ public class NomeSobrenoForm extends javax.swing.JFrame {
         jTextFieldSobrenome = new javax.swing.JTextField();
         jTextFieldNome = new javax.swing.JTextField();
         jButtonOk = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jTextFieldIdade = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -48,10 +65,21 @@ public class NomeSobrenoForm extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setText("Digite o seu sobrenome");
 
-        jButtonOk.setText("OK");
+        jButtonOk.setForeground(new java.awt.Color(0, 102, 255));
+        jButtonOk.setText("Gravar");
         jButtonOk.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonOkActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Idade");
+
+        jButton1.setForeground(new java.awt.Color(255, 153, 0));
+        jButton1.setText("Ler");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
             }
         });
 
@@ -60,14 +88,22 @@ public class NomeSobrenoForm extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButtonOk)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel2)
-                        .addComponent(jLabel1)
-                        .addComponent(jTextFieldSobrenome, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
-                        .addComponent(jTextFieldNome)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextFieldIdade, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jTextFieldSobrenome, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
+                                .addComponent(jTextFieldNome, javax.swing.GroupLayout.Alignment.LEADING))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(92, 92, 92)
+                        .addComponent(jButton1)
+                        .addGap(32, 32, 32)
+                        .addComponent(jButtonOk)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -82,25 +118,70 @@ public class NomeSobrenoForm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextFieldSobrenome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonOk)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(26, 26, 26))
+                    .addComponent(jTextFieldIdade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButtonOk))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOkActionPerformed
-        if(jTextFieldNome.getText().isEmpty() || jTextFieldSobrenome.getText().isEmpty()){
-            JOptionPane.showMessageDialog(rootPane, "O usuário deve preencher o nome e sobrenome...", "ERRO DE UTILIZAÇÂO",JOptionPane.ERROR_MESSAGE);
-        }else{
+        if (jTextFieldNome.getText().isEmpty() || jTextFieldSobrenome.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "O usuário deve preencher o nome e sobrenome...", "ERRO DE UTILIZAÇÂO", JOptionPane.ERROR_MESSAGE);
+        } else {
+            Pessoa p = new Pessoa();
             String msg = jTextFieldNome.getText() + " " + jTextFieldSobrenome.getText();
-            JOptionPane.showMessageDialog(rootPane, "Bem vindo(a)! " + msg, "WELCOME",JOptionPane.INFORMATION_MESSAGE);
-            v.add(jTextFieldNome.getText());
+            JOptionPane.showMessageDialog(rootPane, "Bem vindo(a)! " + msg, "WELCOME", JOptionPane.INFORMATION_MESSAGE);
+            p.setNome(jTextFieldNome.getText());
+            p.setSobreNome(jTextFieldSobrenome.getText());
+            p.setIdade(Integer.parseInt(jTextFieldIdade.getText()));
+
+            v.add(p);
+            try {
+                br.write(p.toString());
+                br.newLine();
+                br.flush();
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage());
+                Logger.getLogger(NomeSobrenoForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         System.out.println(v);
-        jLabel1.setForeground(Color.blue);
-        jTextFieldSobrenome.setBackground(Color.red);
+
     }//GEN-LAST:event_jButtonOkActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            StringBuilder str = new StringBuilder();
+            File f = new File("arquivo.txt");
+            FileReader fr = new FileReader(f);
+            BufferedReader bf = new BufferedReader(fr);
+            String line = bf.readLine();
+            while (line != null) {
+                Pessoa p = new Pessoa();
+                StringTokenizer tk = new StringTokenizer(line, ",");
+                p.setNome(tk.nextToken());
+                p.setSobreNome(tk.nextToken());
+                p.setIdade(Integer.parseInt(tk.nextToken()));
+                JOptionPane.showMessageDialog(this, p);                                
+                str.append(line + "\n");
+                line = bf.readLine();
+            }
+            JOptionPane.showMessageDialog(this, str);
+        } catch (IOException ex) {
+            ex.getMessage();
+        }
+
+
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -116,16 +197,24 @@ public class NomeSobrenoForm extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(NomeSobrenoForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NomeSobrenoForm.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(NomeSobrenoForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NomeSobrenoForm.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(NomeSobrenoForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NomeSobrenoForm.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(NomeSobrenoForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NomeSobrenoForm.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -137,10 +226,14 @@ public class NomeSobrenoForm extends javax.swing.JFrame {
         });
     }
 
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonOk;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JTextField jTextFieldIdade;
     private javax.swing.JTextField jTextFieldNome;
     private javax.swing.JTextField jTextFieldSobrenome;
     // End of variables declaration//GEN-END:variables
