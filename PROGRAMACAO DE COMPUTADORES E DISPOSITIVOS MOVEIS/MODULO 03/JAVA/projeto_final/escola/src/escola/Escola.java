@@ -1,8 +1,10 @@
 package escola;
 
+import escola.forms.PrincipalForm;
+
 /**
  *
- * @author ander
+ * @author Anderson Lopes
  */
 public class Escola {
 
@@ -10,7 +12,9 @@ public class Escola {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        PrincipalForm PrincipalForm = new PrincipalForm();
+        PrincipalForm.setVisible(true);
+        
     }
 
 }
