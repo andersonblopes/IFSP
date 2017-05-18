@@ -9,31 +9,25 @@ import java.sql.SQLException;
  * @author Anderson Lopes
  */
 public class Conexao {
-    
+
     private static Conexao instance = null;
     private Connection connection = null;
-    
-    private Conexao(){
+
+    private Conexao() {
         try {
             String driverName = "com.mysql.jdbc.Driver";
-            
+
             Class.forName(driverName);
-            
+
             String serverName = "127.0.0.1";
             String dbName = "escoladb";
-            
+
             String url = "jdbc:mysql://" + serverName + "/" + dbName;
-            
+
             String username = "root";
             String password = "root";
-            
+
             connection = DriverManager.getConnection(url, username, password);
-            
-            if (connection != null) {
-                System.out.println("STATUS--->Conectado com sucesso!");
-            } else {
-                System.err.println("STATUS--->Não foi possivel realizar conexão");
-            }
             connection.setAutoCommit(true);
         } catch (ClassNotFoundException e) {
             System.out.println("O driver expecificado nao foi encontrado.");
@@ -42,7 +36,7 @@ public class Conexao {
         }
     }
 
-    public static Conexao getInstance(){
+    public static Conexao getInstance() {
         if (instance == null) {
             instance = new Conexao();
         }

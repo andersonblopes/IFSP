@@ -29,7 +29,7 @@ public class CadastroDisciplinaForm extends javax.swing.JFrame {
         d.setDescricao(jTextFieldDisciplina.getText());
         d.setCurso(jTextFieldCurso.getText());
         d.setVagas(Integer.parseInt(jTextFieldVagas.getText()));
-        d.setPeriodo(jTextFieldTurno.getText());
+        d.setPeriodo(jComboPeriodo.getSelectedItem().toString());
         d.setCargaHoraria(Integer.parseInt(jTextFieldCargaHoraria.getText()));
         return d;
     }
@@ -43,32 +43,32 @@ public class CadastroDisciplinaForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jCheckBox1 = new javax.swing.JCheckBox();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList<>();
         jLabelDisciplina = new javax.swing.JLabel();
         jTextFieldDisciplina = new javax.swing.JTextField();
         jLabelCargaHoraria = new javax.swing.JLabel();
         jTextFieldCargaHoraria = new javax.swing.JTextField();
-        try{
-            javax.swing.text.MaskFormatter var = new javax.swing.text.MaskFormatter("####");
-
-            jTextFieldCargaHoraria = new javax.swing.JFormattedTextField(var);
-        }catch(Exception e){
-        }
         jLabelVagas = new javax.swing.JLabel();
         jTextFieldVagas = new javax.swing.JTextField();
-        try{
-            javax.swing.text.MaskFormatter var = new javax.swing.text.MaskFormatter("###");
-
-            jTextFieldVagas = new javax.swing.JFormattedTextField(var);
-        }catch(Exception e){
-        }
-        jLabelTurno = new javax.swing.JLabel();
-        jTextFieldTurno = new javax.swing.JTextField();
+        jLabelPeriodo = new javax.swing.JLabel();
         jLabelCurso = new javax.swing.JLabel();
         jTextFieldCurso = new javax.swing.JTextField();
         jButtonCancelar = new javax.swing.JButton();
         jButtonCadastrar = new javax.swing.JButton();
+        jComboPeriodo = new javax.swing.JComboBox<>();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jCheckBox1.setText("jCheckBox1");
+
+        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(jList1);
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("SYSEscola - Cadastro de disciplina");
         setBackground(java.awt.Color.darkGray);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -87,9 +87,7 @@ public class CadastroDisciplinaForm extends javax.swing.JFrame {
 
         jTextFieldVagas.setToolTipText("Número de vagas");
 
-        jLabelTurno.setText("Turno");
-
-        jTextFieldTurno.setToolTipText("Turno das aulas");
+        jLabelPeriodo.setText("Período");
 
         jLabelCurso.setText("Curso");
 
@@ -109,6 +107,8 @@ public class CadastroDisciplinaForm extends javax.swing.JFrame {
             }
         });
 
+        jComboPeriodo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Matutino", "Vespertino", "Noturno", "Integral" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -118,27 +118,28 @@ public class CadastroDisciplinaForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTextFieldDisciplina)
                     .addComponent(jTextFieldCurso)
-                    .addComponent(jLabelDisciplina)
-                    .addComponent(jLabelCurso)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextFieldCargaHoraria, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabelCargaHoraria))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabelVagas)
-                                .addGap(44, 44, 44)
-                                .addComponent(jLabelTurno)
-                                .addGap(0, 165, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jTextFieldVagas, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextFieldTurno))))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButtonCadastrar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButtonCancelar)))
+                        .addComponent(jButtonCancelar))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabelDisciplina)
+                        .addComponent(jLabelCurso)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jTextFieldCargaHoraria, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabelCargaHoraria))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLabelVagas)
+                                    .addGap(44, 44, 44)
+                                    .addComponent(jLabelPeriodo)
+                                    .addGap(0, 0, Short.MAX_VALUE))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jTextFieldVagas, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(jComboPeriodo, 0, 193, Short.MAX_VALUE))))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -152,12 +153,12 @@ public class CadastroDisciplinaForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelCargaHoraria)
                     .addComponent(jLabelVagas)
-                    .addComponent(jLabelTurno))
+                    .addComponent(jLabelPeriodo))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldCargaHoraria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextFieldVagas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldTurno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboPeriodo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabelCurso)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -185,9 +186,7 @@ public class CadastroDisciplinaForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonCadastrarActionPerformed
 
     private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
-        PrincipalForm p = new PrincipalForm();
-        p.setVisible(true);
-        dispose();
+        this.dispose();
     }//GEN-LAST:event_jButtonCancelarActionPerformed
 
     /**
@@ -228,15 +227,18 @@ public class CadastroDisciplinaForm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCadastrar;
     private javax.swing.JButton jButtonCancelar;
+    private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JComboBox<String> jComboPeriodo;
     private javax.swing.JLabel jLabelCargaHoraria;
     private javax.swing.JLabel jLabelCurso;
     private javax.swing.JLabel jLabelDisciplina;
-    private javax.swing.JLabel jLabelTurno;
+    private javax.swing.JLabel jLabelPeriodo;
     private javax.swing.JLabel jLabelVagas;
+    private javax.swing.JList<String> jList1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextFieldCargaHoraria;
     private javax.swing.JTextField jTextFieldCurso;
     private javax.swing.JTextField jTextFieldDisciplina;
-    private javax.swing.JTextField jTextFieldTurno;
     private javax.swing.JTextField jTextFieldVagas;
     // End of variables declaration//GEN-END:variables
 }
