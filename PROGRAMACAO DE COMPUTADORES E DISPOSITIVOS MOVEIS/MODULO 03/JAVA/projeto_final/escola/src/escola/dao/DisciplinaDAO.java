@@ -6,8 +6,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -15,23 +13,30 @@ import java.util.logging.Logger;
  */
 public class DisciplinaDAO {
 
+    //Insere registro na base de dados
     public boolean save(Disciplina disciplina) {
         try {
+            //Query a ser executado
             String comando = "INSERT INTO disciplina (descricao, carga_horaria, curso, vagas, periodo) VALUES (?,?,?,?,?)";
             PreparedStatement statement = getConnection().prepareStatement(comando);
+
+            //Parametros setados para a query
             statement.setString(1, disciplina.getDescricao());
             statement.setInt(2, disciplina.getCargaHoraria());
             statement.setString(3, disciplina.getCurso());
             statement.setInt(4, disciplina.getVagas());
             statement.setString(5, disciplina.getPeriodo());
+
+            //Execução da query
             statement.executeUpdate();
             return true;
         } catch (SQLException ex) {
-            Logger.getLogger(DisciplinaDAO.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Erro ao tentar inserir dados!!!" + "\n" + ex.getMessage());
             return false;
         }
     }
 
+    //Obtém lista de disciplinas cadastradas
     public ResultSet listarDados() {
         try {
             String comando = "SELECT * FROM disciplina;";
@@ -42,6 +47,7 @@ public class DisciplinaDAO {
         }
     }
 
+    //Exclui disciplina com base no id forbecido
     public boolean removerDisciplina(int id) {
         try {
             String comando = "DELETE FROM disciplina WHERE id = " + id + ";";
@@ -53,6 +59,7 @@ public class DisciplinaDAO {
         }
     }
 
+    //Obtém conexão
     public Connection getConnection() {
         return Conexao.getInstance().getConnection();
     }

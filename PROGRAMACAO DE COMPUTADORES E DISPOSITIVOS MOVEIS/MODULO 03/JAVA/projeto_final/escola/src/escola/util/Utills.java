@@ -15,6 +15,7 @@ import javax.swing.JTextField;
  */
 public class Utills {
 
+    //Intera todos os campos da tela seta String vazia
     public void LimpaTela(JFrame Frame) {
         //limpa os campos     
         for (int i = 0; i < Frame.getContentPane().getComponentCount(); i++) {

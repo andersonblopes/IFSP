@@ -11,26 +11,48 @@ import javax.swing.JOptionPane;
  */
 public class CadastroDisciplinaForm extends javax.swing.JFrame {
 
+    //Variável para ações na base de dados
+    private DisciplinaDAO dao;
+
     /**
      * Creates new form CadastroDisciplinaForm
      */
-    private DisciplinaDAO dao;
-
     public CadastroDisciplinaForm() {
         initComponents();
+        
+        //Instancia objeto necessário para ações na base de dados
+        dao = new DisciplinaDAO();
     }
 
+    //Chama o método que limpa os campos da tela
     public void limparCampos() {
         new Utills().LimpaTela(this);
     }
 
+    //Método responsável por validar preenchimento dos campos
+    public boolean validarCampos() {
+        if (jTextFieldDisciplina.getText().trim().equals("")) {
+            JOptionPane.showMessageDialog(rootPane, "Disciplina deve ser preenchido!!!", "Campo obrigatório.", JOptionPane.ERROR_MESSAGE);
+        } else if (jTextFieldCargaHoraria.getText().trim().equals("")) {
+            JOptionPane.showMessageDialog(rootPane, "Carga Horária deve ser preenchida!!!", "Campo obrigatório.", JOptionPane.ERROR_MESSAGE);
+        } else if (jTextFieldVagas.getText().trim().equals("")) {
+            JOptionPane.showMessageDialog(rootPane, "Quantidade de Vagas deve ser preenchido!!!", "Campo obrigatório.", JOptionPane.ERROR_MESSAGE);
+        } else if (jTextFieldCurso.getText().trim().equals("")) {
+            JOptionPane.showMessageDialog(rootPane, "Nome do curso deve ser preenchido!!!", "Campo obrigatório.", JOptionPane.ERROR_MESSAGE);
+        } else {
+            return true;
+        }
+        return false;
+    }
+
+    //Método para popular o objeto que será persistido na base de dados
     public Disciplina montarDisciplina() {
         Disciplina d = new Disciplina();
-        d.setDescricao(jTextFieldDisciplina.getText());
-        d.setCurso(jTextFieldCurso.getText());
-        d.setVagas(Integer.parseInt(jTextFieldVagas.getText()));
-        d.setPeriodo(jComboPeriodo.getSelectedItem().toString());
-        d.setCargaHoraria(Integer.parseInt(jTextFieldCargaHoraria.getText()));
+        d.setDescricao(jTextFieldDisciplina.getText().toUpperCase());
+        d.setVagas(Integer.parseInt(jTextFieldVagas.getText().toUpperCase()));
+        d.setPeriodo(jComboPeriodo.getSelectedItem().toString().toUpperCase());
+        d.setCargaHoraria(Integer.parseInt(jTextFieldCargaHoraria.getText().toUpperCase()));
+        d.setCurso(jTextFieldCurso.getText().toUpperCase());
         return d;
     }
 
@@ -58,6 +80,7 @@ public class CadastroDisciplinaForm extends javax.swing.JFrame {
         jButtonCancelar = new javax.swing.JButton();
         jButtonCadastrar = new javax.swing.JButton();
         jComboPeriodo = new javax.swing.JComboBox<>();
+        jButtonLimpar = new javax.swing.JButton();
 
         jCheckBox1.setText("jCheckBox1");
 
@@ -68,7 +91,7 @@ public class CadastroDisciplinaForm extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jList1);
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("SYSEscola - Cadastro de disciplina");
         setBackground(java.awt.Color.darkGray);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -109,6 +132,13 @@ public class CadastroDisciplinaForm extends javax.swing.JFrame {
 
         jComboPeriodo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Matutino", "Vespertino", "Noturno", "Integral" }));
 
+        jButtonLimpar.setText("Limpar");
+        jButtonLimpar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonLimparActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -120,26 +150,30 @@ public class CadastroDisciplinaForm extends javax.swing.JFrame {
                     .addComponent(jTextFieldCurso)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButtonCadastrar)
+                        .addGap(54, 54, 54)
+                        .addComponent(jButtonLimpar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButtonCancelar))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabelDisciplina)
-                        .addComponent(jLabelCurso)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jTextFieldCargaHoraria, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabelCargaHoraria))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabelVagas)
-                                    .addGap(44, 44, 44)
-                                    .addComponent(jLabelPeriodo)
-                                    .addGap(0, 0, Short.MAX_VALUE))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jTextFieldVagas, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(jComboPeriodo, 0, 193, Short.MAX_VALUE))))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextFieldCargaHoraria, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelCargaHoraria))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabelVagas)
+                                .addGap(44, 44, 44)
+                                .addComponent(jLabelPeriodo)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jTextFieldVagas, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jComboPeriodo, 0, 193, Short.MAX_VALUE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabelDisciplina)
+                            .addComponent(jLabelCurso))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -166,7 +200,9 @@ public class CadastroDisciplinaForm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButtonCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButtonCadastrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButtonCadastrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonLimpar)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -175,19 +211,32 @@ public class CadastroDisciplinaForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCadastrarActionPerformed
-        dao = new DisciplinaDAO();
-        if (dao.save(montarDisciplina())) {
-            JOptionPane.showMessageDialog(rootPane, "Disciplina cadastrada com sucesso!!!", "Concluído.", JOptionPane.INFORMATION_MESSAGE);
-            limparCampos();
-        } else {
-            JOptionPane.showMessageDialog(rootPane, "Erro ao cadastrar disciplina!!!", "Erro.", JOptionPane.ERROR_MESSAGE);
+        if (validarCampos()) {
+            //Cadastra na base de dados caso os campos estejam preenchidos
+            if (dao.save(montarDisciplina())) {
+                JOptionPane.showMessageDialog(rootPane, "Disciplina cadastrada com sucesso!!!", "Concluído.", JOptionPane.INFORMATION_MESSAGE);
+                fecharJanela();
+            } else {
+                //Exibe mensagem de erro caso não insira na base de dados
+                JOptionPane.showMessageDialog(rootPane, "Erro ao cadastrar disciplina!!!", "Erro.", JOptionPane.ERROR_MESSAGE);
+            }
         }
-
     }//GEN-LAST:event_jButtonCadastrarActionPerformed
-
+    //Ação do botão cancelar
     private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
-        this.dispose();
+        fecharJanela();
     }//GEN-LAST:event_jButtonCancelarActionPerformed
+
+    //Ação do botão limpar
+    private void jButtonLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLimparActionPerformed
+        limparCampos();
+    }//GEN-LAST:event_jButtonLimparActionPerformed
+    //Fecha a janela ativa e retorna para a tela inicial
+    private void fecharJanela() {
+        PrincipalForm p = new PrincipalForm();
+        p.setVisible(true);
+        this.dispose();
+    }
 
     /**
      * @param args the command line arguments
@@ -227,6 +276,7 @@ public class CadastroDisciplinaForm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCadastrar;
     private javax.swing.JButton jButtonCancelar;
+    private javax.swing.JButton jButtonLimpar;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JComboBox<String> jComboPeriodo;
     private javax.swing.JLabel jLabelCargaHoraria;

@@ -6,12 +6,10 @@
 package escola.forms;
 
 import escola.dao.DisciplinaDAO;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -27,10 +25,15 @@ public class PrincipalForm extends javax.swing.JFrame {
 
     public PrincipalForm() {
         initComponents();
+
+        //Instancia objeto necessário para ações na base de dados
         dao = new DisciplinaDAO();
+
+        //Popula tabela
         carregarTabela();
     }
 
+    //Busca na base de dados e alimenta componente da tabela
     private void carregarTabela() {
         try {
             ResultSet result = dao.listarDados();
@@ -39,7 +42,7 @@ public class PrincipalForm extends javax.swing.JFrame {
                 Vector vector = new Vector();
                 vector.add(result.getInt("id"));
                 vector.add(result.getString("descricao"));
-                vector.add(result.getInt("carga_horaria"));           
+                vector.add(result.getInt("carga_horaria"));
                 vector.add(result.getInt("vagas"));
                 vector.add(result.getString("periodo"));
                 vector.add(result.getString("curso"));
@@ -47,6 +50,7 @@ public class PrincipalForm extends javax.swing.JFrame {
                 ((DefaultTableModel) jTListagem.getModel()).addRow(vector);
             }
         } catch (SQLException jTListagem) {
+            JOptionPane.showMessageDialog(rootPane, "Erro ao montar a tabela!!!", "Erro.", JOptionPane.ERROR_MESSAGE);
             jTListagem.printStackTrace();
         }
     }
@@ -84,6 +88,11 @@ public class PrincipalForm extends javax.swing.JFrame {
         });
 
         jButton2.setText("EXCLUIR");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(51, 51, 255));
@@ -121,24 +130,24 @@ public class PrincipalForm extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 489, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 501, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -147,7 +156,7 @@ public class PrincipalForm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -155,10 +164,56 @@ public class PrincipalForm extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    //Ação do botão cadastrar
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         CadastroDisciplinaForm cadastrarForm = new CadastroDisciplinaForm();
+
+        //Inicializa tela de cadastro
         cadastrarForm.setVisible(true);
+
+        //Fecha janela atual
+        this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    //Ação do botão excluir
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        DefaultTableModel model = ((DefaultTableModel) jTListagem.getModel());
+
+        //Verifica se tabela não está vazia e se tem alguma linha selecionada
+        if (jTListagem.getSelectedRow() == -1) {
+            if (jTListagem.getRowCount() == 0) {
+
+                //Exibe mensagem caso tabela esteja vazia e o botão excluir seja acionado
+                JOptionPane.showMessageDialog(rootPane, "Tabela vazia!!!", "Aviso.", JOptionPane.WARNING_MESSAGE);
+                
+            } else {
+
+                //Exibe mensagem caso tabela não esteja vazia e nenhuma linha foi selecionado quando o botão excluir foi acionado
+                JOptionPane.showMessageDialog(rootPane, "Selecione uma linha para excluir!!!", "Aviso.", JOptionPane.WARNING_MESSAGE);
+                
+            }
+        } else {
+            int resposta = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir?", "Confirmação de exclusão!", JOptionPane.YES_NO_OPTION);
+
+            //Verifica se resposta de confirmação de exclusão foi "Sim"
+            if (resposta == JOptionPane.YES_OPTION) {
+
+                //Obtemid da linha selecionada
+                String id = String.valueOf(model.getValueAt(jTListagem.getSelectedRow(), 0));
+
+                //Remove registro da base de dados de acordo com id obtido
+                if (dao.removerDisciplina(Integer.parseInt(id))) {
+                    JOptionPane.showMessageDialog(rootPane, "Disciplina removida com sucesso!!!", "Concluído.", JOptionPane.INFORMATION_MESSAGE);
+
+                    //Remove da tabela da tela
+                    model.removeRow(jTListagem.getSelectedRow());
+                } else {
+                    //Exibe mensagem caso não consiga excluir registro
+                    JOptionPane.showMessageDialog(rootPane, "Erro ao excluir disciplina!!!", "Erro.", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
